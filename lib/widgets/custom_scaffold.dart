@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/screens/welcom_screen.dart';
 
 class CustomScaffold extends StatelessWidget {
   const CustomScaffold({super.key, this.child});
@@ -6,7 +7,18 @@ class CustomScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+      canPop: false, // デフォルトの戻る動作を無効化
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          // 戻るボタンが押されたら WelcomeScreen に遷移
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => WelcomScreen()),
+            (Route<dynamic> route) => false, // すべての前のページを削除
+          );
+        }
+      },
+      child: Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.transparent,
@@ -26,6 +38,7 @@ class CustomScaffold extends StatelessWidget {
           ),
         ],
       ),
+    )
     );
   }
 }
