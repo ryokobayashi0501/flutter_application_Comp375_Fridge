@@ -22,6 +22,7 @@ class _SignupScreenState extends State<SignUpScreen> {
 
   bool rememberPassword = true;
   bool isLoading = false;
+  bool _isPasswordVisible = false;
   String? errorMessage;
 
   /// **📌 サインアップ処理**
@@ -50,7 +51,7 @@ class _SignupScreenState extends State<SignUpScreen> {
         // サインアップ成功 → ホーム画面へ遷移
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) => const DashboardScreen()),
         );
       }
     } else if (!rememberPassword) {
@@ -129,7 +130,7 @@ class _SignupScreenState extends State<SignUpScreen> {
                       // **パスワード入力**
                       TextFormField(
                         controller: _passwordController,
-                        obscureText: true,
+                        obscureText: !_isPasswordVisible,
                         validator: (value) =>
                             value == null || value.isEmpty ? 'Please enter Password' : null,
                         decoration: InputDecoration(
@@ -138,6 +139,17 @@ class _SignupScreenState extends State<SignUpScreen> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onPressed: (){
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                          )
                         ),
                       ),
                       const SizedBox(height: 25.0),

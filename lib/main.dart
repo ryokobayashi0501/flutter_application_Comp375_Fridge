@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/screens/home_screen.dart';
 import 'package:flutter_application/screens/welcom_screen.dart';
 
 void main() {
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const WelcomScreen(),
+      //home: const WelcomScreen(),
+      home: const DashboardScreen(),
     );
   }
 }

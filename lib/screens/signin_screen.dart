@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/apis/user_auth.dart';
+import 'package:flutter_application/screens/forget_password_screen.dart';
 import 'package:flutter_application/screens/home_screen.dart';
 import 'package:flutter_application/screens/signup_screen.dart';
 import 'package:flutter_application/theme/theme.dart';
@@ -19,7 +20,9 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   bool rememberPassword = true;
+  bool savePassword = false;
   bool isLoading = false;
+  bool _isPasswordVisible = false;
   String? errorMessage;
 
   /// **📌 ログイン処理**
@@ -43,7 +46,7 @@ class _SignInScreenState extends State<SignInScreen> {
         // ログイン成功 → `HomeScreen` に遷移
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) => const DashboardScreen()),
         );
       } else {
         // ログイン失敗
@@ -108,7 +111,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       // **パスワード入力**
                       TextFormField(
                         controller: _passwordController,
-                        obscureText: true,
+                        obscureText: !_isPasswordVisible,
                         validator: (value) =>
                             value == null || value.isEmpty ? 'Please enter Password' : null,
                         decoration: InputDecoration(
@@ -117,7 +120,83 @@ class _SignInScreenState extends State<SignInScreen> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                          ),
                         ),
+                      ),
+                      const SizedBox(height: 25.0),
+
+                      // **Remember me / Save password / Forget password**
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value: rememberPassword,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        rememberPassword = value!;
+                                      });
+                                    },
+                                    activeColor: lightColorScheme.primary,
+                                  ),
+                                  const Text(
+                                    'Remember me',
+                                    style: TextStyle(color: Colors.black45),
+                                  ),
+                                ],
+                              ),
+                              // Row(
+                              //   children: [
+                              //     Checkbox(
+                              //       value: savePassword,
+                              //       onChanged: (bool? value) {
+                              //         setState(() {
+                              //           savePassword = value!;
+                              //         });
+                              //       },
+                              //       activeColor: lightColorScheme.primary,
+                              //     ),
+                              //     const Text(
+                              //       'Save password',
+                              //       style: TextStyle(color: Colors.black45),
+                              //     ),
+                              //   ],
+                              // ),
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              // ✅ Forget password 画面に遷移
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ForgetPasswordScreen(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Forget password?',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: lightColorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 25.0),
 
